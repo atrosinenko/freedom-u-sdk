@@ -15,7 +15,7 @@
                         entry = <0x80000000>;
                         compression = "none";
                         hash-1 {
-                                algo = "sha256";
+                                algo = "md5";
                         };
                 };
 
@@ -28,7 +28,7 @@
                         load = <0x80200000>;
                         compression = "none";
                         hash-1 {
-                                algo = "sha256";
+                                algo = "md5";
                         };
                 };
 
@@ -41,18 +41,18 @@
                         load = <0x82000000>;
                         compression = "gzip";
                         hash-1 {
-                                algo = "sha256";
+                                algo = "md5";
                         };
                 };
 
                 fdt {
-                        data = /incbin/("../work/HiFive_U-Boot/arch/riscv/dts/hifive_u540.dtb");
+                        data = /incbin/("../work/HiFive_U-Boot/arch/riscv/dts/zeowaa-1gb.dtb");
                         type = "flat_dt";
                         arch = "riscv";
-                        load = <0x81f00000>;
+                        load = <0x801f0000>;
                         compression = "none";
                         hash-1 {
-                                algo = "sha256";
+                                algo = "md5";
                         };
                 };
         };

@@ -177,6 +177,7 @@ $(bbl): $(pk_srcdir)
 	cd $(pk_wrkdir) && PATH=$(RVPATH) $</configure \
 		--host=$(target) \
 		--enable-logo \
+		--enable-print-device-tree \
 		--with-logo=$(abspath conf/sifive_logo.txt)
 	CFLAGS="-mabi=$(ABI) -march=$(ISA)" $(MAKE) PATH=$(RVPATH) -C $(pk_wrkdir)
 
@@ -238,7 +239,7 @@ $(uboot): $(uboot_srcdir) $(target_gcc)
 	rm -rf $(uboot_wrkdir)
 	mkdir -p $(uboot_wrkdir)
 	mkdir -p $(dir $@)
-	$(MAKE) -C $(uboot_srcdir) O=$(uboot_wrkdir) HiFive-U540_regression_defconfig
+	$(MAKE) -C $(uboot_srcdir) O=$(uboot_wrkdir) zeowaa-1gb_defconfig
 	$(MAKE) -C $(uboot_srcdir) O=$(uboot_wrkdir) CROSS_COMPILE=$(CROSS_COMPILE)
 
 $(rootfs): $(buildroot_rootfs_ext)
@@ -263,7 +264,7 @@ sim: $(spike) $(bbl_payload)
 .PHONY: qemu
 qemu: $(qemu) $(bbl) $(vmlinux) $(initramfs)
 	$(qemu) -nographic -machine virt -bios $(bbl) -kernel $(vmlinux) -initrd $(initramfs) \
-		-netdev user,id=net0 -device virtio-net-device,netdev=net0
+		-netdev user,id=net0 -device virtio-net-device,netdev=net0 -m 1024
 
 .PHONY: qemu-rootfs
 qemu-rootfs: $(qemu) $(bbl) $(vmlinux) $(initramfs) $(rootfs)
@@ -316,6 +317,7 @@ $(flash_image): $(uboot) $(fit) $(vfat_image)
 	dd conv=notrunc if=$(uboot) of=$(flash_image) bs=512 seek=$(UBOOT_START) count=$(UBOOT_SIZE)
 
 DEMO_END=11718750
+DEMO_END=3078900
 
 #$(demo_image): $(uboot) $(fit) $(vfat_image) $(ext_image)
 #	dd if=/dev/zero of=$(flash_image) bs=512 count=$(DEMO_END)
